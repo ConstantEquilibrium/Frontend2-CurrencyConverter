@@ -26,21 +26,22 @@
             </ul>
 
         </nav>
+    <div class="outer-container">
+        <div class="inner-container">
+            <div class="form-group">
+                <input type="number" class="currency-amount-input" placeholder="0">
+                
+                <select class="countries country-list" id="convert-from"></select>
+                
+                <i class="fas fa-exchange-alt fa-1x" id="switch-order"></i>
+                
+                <select class="countries country-list" id="convert-to"></select>
 
-    <div class="container">
-        <div class="form-group">
-            <input type="number" class="currency-amount-input">
-            
-            <select class="countries country-list" id="convert-from"></select>
-            
-            <i class="fas fa-exchange-alt fa-1x" id="switch-order"></i>
-            
-            <select class="countries country-list" id="convert-to"></select>
+                <a class="btn-convert btn btn-primary">Convert</a>
+            </div>
 
-            <a class="btn-convert btn btn-primary">Convert</a>
+            <div class="result"></div> 
         </div>
-
-        <div class="result"></div>
     </div>
 
     <footer>
