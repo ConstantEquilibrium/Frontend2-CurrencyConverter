@@ -81,13 +81,13 @@ function convert() {
         }
     }
 
-    let result = Math.round(((baseval / compareval) * startval) * 1000) / 1000;
+    let result = Math.round((((baseval / compareval) * startval) * 100) * amount) / 100;
 
     let container = document.querySelector('.result');
     let h2 = document.createElement('h2');
     container.innerHTML = '';
 
-    h2.appendChild(document.createTextNode(base + amount + " = " + out + result));
+    h2.appendChild(document.createTextNode(base + ' ' + amount + " = " + out + ' ' + result));
     container.appendChild(h2);
 
 }

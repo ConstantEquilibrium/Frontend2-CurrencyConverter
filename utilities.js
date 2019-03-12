@@ -1,7 +1,7 @@
 var utilities = (function() {
     async function compare() {
         let currentTime = new Date();
-        if(localStorage.getItem('rates') == null || (currentTime.getTime() - JSON.parse(localStorage.getItem('rates')).time) > 360000) {
+        if(localStorage.getItem('rates') == null || (currentTime.getTime() - JSON.parse(localStorage.getItem('rates')).time) > 3600000) {
             return true;
         } else {
             return false;
