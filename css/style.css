@@ -73,8 +73,18 @@ footer {
         border:none;
         padding:0.4rem 0.8rem;
         margin:0 1rem;
-        background:rgba(255,255,255,0.3);
+        background:rgba(255,255,255,0.1);
     }
+
+        .form-group > input:hover, .form-group > select {
+            background:rgba(255,255,255,0.3);
+            transition: 0.3s;
+        }
+
+        .form-group > input:not(:hover), .form-group > select:not(:hover) {
+            background:rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
 
     .form-group > span {
         vertical-align: middle;

@@ -1,30 +1,37 @@
-// getData(); 
 init();
 
 async function init() {
-    createDropDown();
-    if(storage.compare === true) {
-        storage.setStorage();
+    if(await utilities.compare() == true) {
+        await utilities.setStorage();
     }
+
+    createDropDown();
+    
+    /** EVENT LISTENERS **/
+    document.querySelector('#switch-order').addEventListener('click', switch_order);
+    document.querySelector('.btn-convert').addEventListener('click', convert);
 }
 
-document.querySelector('#switch-order').addEventListener('click', switch_order);
-document.querySelector('.btn-convert').addEventListener('click', convert);
-
 async function getData(base, out) {
-    let res = await api.getrates(base, out);
-    let rates = res.rates;
-    return rates;
+    let res;
+    if(utilities.compare() == true) {
+        utilities.setStorage();
+        res = JSON.parse(localStorage.getItem('rates'));
+    } else {
+        let datetime = new Date();
+        res = JSON.parse(localStorage.getItem('rates'));
+    }
+
+    return res;
 }
 
 async function createDropDown() {
-    let rates = await getData('SEK', '');
+    let res = await getData();
     let select = document.querySelectorAll("select");
 
-    for(let i = 0; i < select.length; i++) {
-        for (const prop in rates) {
-            if (rates.hasOwnProperty(prop)) {
-                const currency = rates[prop];
+    for (let i = 0; i < select.length; i++) {
+        for (const prop in res.rates) {
+            if (res.rates.hasOwnProperty(prop)) {
 
                 let option = document.createElement('option');
                 option.setAttribute('value', prop);
@@ -36,39 +43,51 @@ async function createDropDown() {
     }
 }
 
-async function switch_order() {
+function switch_order() {
     let country_input = document.querySelector('#convert-from');
-        let country_input_val = country_input.value;
+    let country_input_val = country_input.value;
     let country_output = document.querySelector('#convert-to');
-        let country_output_val = country_output.value;
+    let country_output_val = country_output.value;
 
     country_input.value = country_output_val;
     country_output.value = country_input_val;
 }
 
-async function convert() {
-    let base = document.querySelector('#convert-from').value;
-    let out = document.querySelector('#convert-to').value;
+function convert() {
+    out = document.querySelector('#convert-to').value;
+    base = document.querySelector('#convert-from').value;
     
-    let input_amount = document.querySelector('.currency-amount-input').value;
-    let output_amount;
-
-    let rates = (JSON.parse(localStorage.getItem('rates')).rates);
+    let amount = document.querySelector('.currency-amount-input').value;
     
-    let result = await getData(base, out);
+    let res = JSON.parse(localStorage.getItem('rates')).rates;
+    let startval;
+    let compareval;
+    let baseval;
 
-    for (const key in result) {
-        if (result.hasOwnProperty(key)) {
-            const element = result[key];
-            output_amount = input_amount * element;
+    for (const key in res) {
+        if (res.hasOwnProperty(key)) {
+            const element = res[key];
+            if(key == base) {
+                compareval = element;
+            }
+
+            if(key == out) {
+                startval = element;
+            }
+
+            if(key == 'SEK') {
+                baseval = element;
+            }
         }
     }
 
-    // return output_amount;
+    let result = Math.round(((baseval / compareval) * startval) * 1000) / 1000;
+
     let container = document.querySelector('.result');
-    container.innerHTML = '';
     let h2 = document.createElement('h2');
-    let node = document.createTextNode(base + ' ' + input_amount + ' = ' + out + ' ' + output_amount);
-    h2.appendChild(node);
+    container.innerHTML = '';
+
+    h2.appendChild(document.createTextNode(base + amount + " = " + out + result));
     container.appendChild(h2);
+
 }
